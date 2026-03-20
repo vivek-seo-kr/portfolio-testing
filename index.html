@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivek Kumar | Senior SEO Specialist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #020617; /* slate-950 */
+            color: #f8fafc; /* slate-50 */
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        /* Custom animations */
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.4), 0 0 70px rgba(52, 211, 153, 0.2); }
+        }
+        .glow-active {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .animate-bounce-subtle {
+            animation: bounce-subtle 4s ease-in-out infinite;
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 12s linear infinite;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(2rem);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 selection:bg-blue-500/30 overflow-x-hidden">
+
+    <!-- Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-blue-500 to-emerald-400 transition-all duration-150 ease-out z-[60]" style="width: 0%"></div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent py-6">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-bold font-heading tracking-tight group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <span class="text-blue-500 group-hover:text-emerald-400 transition-colors">Vivek Kumar</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden lg:flex gap-6 items-center font-medium text-slate-400 text-sm">
+                <a href="#about" class="nav-link relative transition-all duration-300 hover:text-white" data-section="about">About</a>
+                <a href="#services" class="nav-link relative transition-all duration-300 hover:text-white" data-section="services">Expertise</a>
+                <a href="#experience" class="nav-link relative transition-all duration-300 hover:text-white" data-section="experience">History</a>
+                <a href="#case-studies" class="nav-link relative transition-all duration-300 hover:text-white" data-section="case-studies">Results</a>
+                <a href="#tools" class="nav-link relative transition-all duration-300 hover:text-white" data-section="tools">Stack</a>
+                <a href="#process" class="nav-link relative transition-all duration-300 hover:text-white" data-section="process">Process</a>
+                <a href="#contact" class="nav-link relative transition-all duration-300 hover:text-white" data-section="contact">Contact</a>
+                <button onclick="openResume()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full transition-all shadow-lg shadow-blue-500/20 text-sm font-bold ml-4">
+                    Resume
+                </button>
+                <button onclick="downloadPortfolio()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full transition-all shadow-lg shadow-emerald-500/20 text-sm font-bold ml-2">
+                    Download HTML
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="menu-toggle" class="lg:hidden text-white p-2" aria-label="Toggle Menu">
+                <div class="w-6 h-5 relative flex flex-col justify-between overflow-hidden">
+                    <span class="menu-bar w-full h-0.5 bg-current transition-all duration-300"></span>
+                    <span class="menu-bar w-full h-0.5 bg-current transition-all duration-300"></span>
+                    <span class="menu-bar w-full h-0.5 bg-current transition-all duration-300"></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Overlay Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-xl transition-all duration-500 lg:hidden opacity-0 -translate-y-full pointer-events-none">
+        <div class="flex flex-col items-center justify-center h-full gap-8 text-2xl font-bold">
+            <a href="#about" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">About</a>
+            <a href="#services" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">Expertise</a>
+            <a href="#experience" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">History</a>
+            <a href="#case-studies" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">Results</a>
+            <a href="#tools" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">Stack</a>
+            <a href="#process" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">Process</a>
+            <a href="#contact" class="mobile-nav-link text-slate-400 hover:text-blue-500 transition-colors">Contact</a>
+            <button onclick="openResume()" class="mt-4 px-10 py-4 bg-blue-600 rounded-2xl text-white shadow-xl shadow-blue-500/20 w-64">
+                Resume
+            </button>
+            <button onclick="downloadPortfolio()" class="mt-2 px-10 py-4 bg-emerald-600 rounded-2xl text-white shadow-xl shadow-emerald-500/20 w-64">
+                Download HTML
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl animate-pulse"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-6 tracking-wide uppercase">
+                            Vivek Kumar
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-black mb-8 leading-[1.1]">
+                            <span class="gradient-text">Senior SEO Specialist</span> | 8+ Years of Experience
+                        </h1>
+                        <p class="text-xl md:text-2xl text-slate-400 mb-10 leading-relaxed max-w-2xl">
+                            I help businesses grow organic traffic, leads, and revenue through data-driven, scalable SEO strategies.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="openResume()" class="px-8 py-4 bg-white text-slate-950 rounded-xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-white/5">
+                                📄 View / Download Resume
+                            </button>
+                            <a href="#contact" class="px-8 py-4 glass text-white rounded-xl font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                                👉 Contact Me
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 relative flex justify-center">
+                        <div class="relative z-10 w-full max-w-[420px] aspect-square rounded-full group p-2">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-blue-500 via-emerald-400 to-blue-600 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500 animate-spin-slow"></div>
+                            <div class="relative w-full h-full rounded-full overflow-hidden border-[6px] border-white/10 glass glow-active z-20 bg-slate-900">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" alt="Vivek" class="w-full h-full object-cover grayscale brightness-110 group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100">
+                                <div class="absolute inset-0 rounded-full shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] pointer-events-none"></div>
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 md:bottom-8 md:right-8 glass p-3 md:p-4 rounded-2xl border border-white/20 shadow-2xl backdrop-blur-xl animate-bounce-subtle z-30">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xl shadow-lg shadow-blue-500/40">📈</div>
+                                    <div class="hidden sm:block">
+                                        <div class="text-sm font-bold text-white whitespace-nowrap">Vivek Kumar</div>
+                                        <div class="text-[10px] text-slate-400 uppercase tracking-tighter">SEO Expert</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-blue-500/10 rounded-full blur-[120px] -z-10"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="glass p-6 rounded-2xl border border-white/5 hover:border-blue-500/20 transition-colors">
+                        <div class="text-3xl font-black text-white mb-1">138%</div>
+                        <div class="text-sm text-slate-400 uppercase tracking-widest font-medium">Avg. Traffic Growth</div>
+                    </div>
+                    <div class="glass p-6 rounded-2xl border border-white/5 hover:border-blue-500/20 transition-colors">
+                        <div class="text-3xl font-black text-white mb-1">50+</div>
+                        <div class="text-sm text-slate-400 uppercase tracking-widest font-medium">Technical Audits</div>
+                    </div>
+                    <div class="glass p-6 rounded-2xl border border-white/5 hover:border-blue-500/20 transition-colors">
+                        <div class="text-3xl font-black text-white mb-1">95%</div>
+                        <div class="text-sm text-slate-400 uppercase tracking-widest font-medium">Client Retention</div>
+                    </div>
+                    <div class="glass p-6 rounded-2xl border border-white/5 hover:border-blue-500/20 transition-colors">
+                        <div class="text-3xl font-black text-white mb-1">8+</div>
+                        <div class="text-sm text-slate-400 uppercase tracking-widest font-medium">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 bg-slate-900/20 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-3xl md:text-5xl font-black mb-8 italic">"SEO is not just traffic, <span class="gradient-text">it's revenue</span>."</h2>
+                    <p class="text-xl text-slate-400 leading-relaxed">
+                        With over 8 years in the trenches, I build data-driven systems that turn organic search into a predictable, scalable lead generation engine. I don't chase vanity keywords; I chase business growth.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-24 bg-slate-950 relative reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-black mb-4">Core <span class="gradient-text">Competencies</span></h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                        Comprehensive organic search solutions designed for longevity, scalability, and measurable ROI.
+                    </p>
+                </div>
+                
+                <div id="services-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Services will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24 bg-slate-900/30 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-black mb-16 text-center">Professional <span class="gradient-text">Journey</span></h2>
+                <div id="experience-timeline" class="max-w-3xl mx-auto space-y-12">
+                    <!-- Experience will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Studies Section -->
+        <section id="case-studies" class="py-24 bg-slate-900/50 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div class="max-w-2xl">
+                        <h2 class="text-4xl md:text-5xl font-black mb-4">KEY <span class="gradient-text">CASE STUDIES</span></h2>
+                        <p class="text-slate-400 text-lg">No vanity metrics. Just real business growth through surgical SEO execution.</p>
+                    </div>
+                </div>
+
+                <div id="case-studies-grid" class="grid md:grid-cols-2 gap-12">
+                    <!-- Case studies will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Tool Section -->
+        <section id="ai-tool" class="py-24 relative overflow-hidden reveal-on-scroll">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-600/5 blur-[120px] pointer-events-none"></div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-5xl mx-auto">
+                    <div class="glass rounded-[2rem] p-8 md:p-16 border-2 border-blue-500/20 shadow-2xl shadow-blue-500/10">
+                        <div class="text-center mb-12">
+                            <h2 class="text-4xl md:text-5xl font-black mb-4">Get a <span class="gradient-text">Instant SEO Strategy</span></h2>
+                            <p class="text-slate-400 text-lg max-w-xl mx-auto">
+                                Powered by Gemini AI, get a custom high-level roadmap for your business niche in seconds.
+                            </p>
+                        </div>
+
+                        <form id="ai-form" class="grid md:grid-cols-2 gap-6 mb-12">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-slate-300 ml-1">Your Industry/Niche</label>
+                                <input id="ai-niche" type="text" placeholder="e.g. SaaS for HR, Local Bakery, Crypto App" class="w-full bg-slate-950/50 border border-slate-700 rounded-xl px-6 py-4 focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-slate-300 ml-1">Website URL (Optional)</label>
+                                <input id="ai-url" type="url" placeholder="https://yourwebsite.com" class="w-full bg-slate-950/50 border border-slate-700 rounded-xl px-6 py-4 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            </div>
+                            <button type="submit" id="ai-submit" class="md:col-span-2 py-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-500/20">
+                                ✨ Generate My Custom SEO Strategy
+                            </button>
+                        </form>
+
+                        <div id="ai-result" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8 bg-slate-950/40 p-8 rounded-2xl border border-blue-500/10">
+                            <!-- Result will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section id="tools" class="py-24 bg-slate-950 relative reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-black mb-4">TOOLS & <span class="gradient-text">STACK</span></h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                        Leveraging industry-standard technology to extract insights and drive precision growth.
+                    </p>
+                </div>
+                <div id="tools-grid" class="flex flex-wrap justify-center gap-6 md:gap-8 max-w-7xl mx-auto">
+                    <!-- Tools will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section id="process" class="py-24 bg-slate-950 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-black text-center mb-16">My Strategic <span class="gradient-text">Process</span></h2>
+                <div id="process-grid" class="grid md:grid-cols-4 gap-4">
+                    <!-- Process will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-24 bg-blue-600/5 reveal-on-scroll">
+            <div class="container mx-auto px-6">
+                <div id="testimonials-grid" class="grid md:grid-cols-2 gap-8">
+                    <!-- Testimonials will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer id="contact" class="py-20 border-t border-slate-900">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-black mb-6">Let's Rank <span class="gradient-text">Higher</span> Together.</h2>
+                        <p class="text-slate-400 text-lg mb-8 max-w-md">
+                            Available for full-scale SEO management, audits, or high-level strategic consulting. 
+                        </p>
+                        <div class="space-y-6">
+                            <a href="mailto:techvivek09@gmail.com" class="flex items-center gap-4 text-lg md:text-xl font-semibold hover:text-blue-400 transition-colors">
+                                <span class="w-12 h-12 glass rounded-full flex items-center justify-center text-blue-400 flex-shrink-0">📧</span>
+                                techvivek09@gmail.com
+                            </a>
+                            <a href="https://www.linkedin.com/in/vivek-kumar-a08125a2/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 text-lg md:text-xl font-semibold hover:text-blue-400 transition-colors">
+                                <span class="w-12 h-12 glass rounded-full flex items-center justify-center text-blue-400 flex-shrink-0">🔗</span>
+                                LinkedIn Profile
+                            </a>
+                            <button onclick="openResume()" class="flex items-center gap-4 text-lg md:text-xl font-semibold hover:text-blue-400 transition-colors text-left">
+                                <span class="w-12 h-12 glass rounded-full flex items-center justify-center text-blue-400 flex-shrink-0">📄</span>
+                                Download Resume
+                            </button>
+                            <button onclick="downloadPortfolio()" class="flex items-center gap-4 text-lg md:text-xl font-semibold hover:text-emerald-400 transition-colors text-left">
+                                <span class="w-12 h-12 glass rounded-full flex items-center justify-center text-emerald-400 flex-shrink-0">💾</span>
+                                Download Portfolio HTML
+                            </button>
+                            <div class="flex items-center gap-4 text-lg md:text-xl font-semibold">
+                                <span class="w-12 h-12 glass rounded-full flex items-center justify-center text-blue-400 flex-shrink-0">📍</span>
+                                Remote / Worldwide
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-8 rounded-3xl">
+                        <h3 class="text-2xl font-bold mb-6">Send a Message</h3>
+                        <form id="contact-form" class="space-y-4">
+                            <input type="text" placeholder="Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all">
+                            <input type="email" placeholder="Work Email" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all">
+                            <textarea rows="4" placeholder="How can I help you grow?" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition-all"></textarea>
+                            <button type="submit" class="w-full py-4 bg-white text-slate-950 font-bold rounded-xl hover:bg-blue-500 hover:text-white transition-all">
+                                Submit Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="mt-20 pt-10 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-500 text-sm">
+                    <div>© 2024 Vivek Kumar. Built with ⚡ & Gemini AI.</div>
+                    <div class="flex gap-8">
+                        <a href="https://www.linkedin.com/in/vivek-kumar-a08125a2/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">LinkedIn</a>
+                        <a href="#" class="hover:text-white transition-colors">Twitter (X)</a>
+                        <a href="#" class="hover:text-white transition-colors">Clutch.co</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-blue-600 text-white rounded-full shadow-xl shadow-blue-500/20 flex items-center justify-center opacity-0 translate-y-10 transition-all duration-300 z-50 hover:bg-blue-700">
+        <span class="text-xl">↑</span>
+    </button>
+
+    <script type="module">
+        import { GoogleGenAI } from "https://esm.sh/@google/genai@^1.38.0";
+
+        // Data from constants.tsx
+        const SERVICES = [
+            { title: "Technical SEO", description: "Large-scale audits, crawlability & index optimisation, schema & structured data, website migrations, and Core Web Vitals.", icon: "⚙️" },
+            { title: "AI-Driven & Generative Search", description: "AI-assisted research, entity-based SEO, and content structuring for AI summarisation and answer engines.", icon: "✨" },
+            { title: "Search Experience (SXO)", description: "UX-led SEO improvements aligned with engagement and lead generation to improve overall conversion rates.", icon: "🔗" },
+            { title: "Strategy & Organic Growth", description: "Roadmap planning, keyword & intent mapping, topic clusters, and conversion-focused SEO systems.", icon: "🔍" },
+            { title: "Analytics & Performance", description: "Google Search Console, GA4, GTM, and custom data visualization for performance analysis and insights.", icon: "📊" },
+            { title: "SEO Tooling & Research", description: "Proficiency in Ahrefs, SEMrush, Screaming Frog, and more for deep-dive research and diagnostics.", icon: "🛠️" }
+        ];
+
+        const EXPERIENCE = [
+            { role: "Senior SEO Specialist", company: "IS Global Web", period: "Sep 2023 - Present", points: ["Managed end-to-end SEO campaigns for multiple clients across competitive niches.", "Conducted in-depth technical SEO audits and implemented fixes to improve crawl efficiency and indexing.", "Implemented static and dynamic schema markup, improving SERP visibility and rich result appearance.", "Created and optimised webpage layouts from scratch to enhance user engagement and conversion rates.", "Identified content gaps using AI-assisted analysis and search intent mapping.", "Improved organic lead generation by optimising CTAs, landing pages, and sign-up flows."] },
+            { role: "Senior SEO Executive", company: "Square Yards", period: "Dec 2021 - Aug 2023", points: ["Worked with cross-functional tech and content teams to improve website structure and scalability.", "Led keyword research using paid and free tools, mapping keywords to high-intent funnels.", "Launched a new content section on InteriorCompany.com, driving 138% organic traffic growth in 6 months.", "Optimised WordPress-based websites, improving site structure, UX, and content presentation.", "Implemented multiple schema types to enhance visibility in featured snippets and rich results."] },
+            { role: "Senior SEO Executive", company: "TradeIndia", period: "May 2019 - Dec 2021", points: ["Implemented SEO processes for multiple client websites.", "Conducted keyword research using Ahrefs and Google Keyword Planner.", "Managed web analytics using Google Analytics to guide optimisation strategies.", "Optimised content, images, and on-page elements to improve search visibility."] },
+            { role: "SEO Executive", company: "Infoage Technology", period: "2018 - 2019", points: ["Executed foundational SEO processes including keyword research and on-page optimisation.", "Supported content optimisation and link-building initiatives.", "Worked across multiple client websites in an agency environment."] }
+        ];
+
+        const EDUCATION = [
+            { degree: "Master of Business Administration (MBA)", institution: "Suresh Gyan Vihar University, Jaipur", period: "2022 – 2024" }
+        ];
+
+        const ACHIEVEMENTS = [
+            "Achieved 138% organic traffic growth within 6 months through content and technical SEO initiatives.",
+            "Improved search visibility and keyword rankings for competitive commercial keywords.",
+            "Independently managed complete website migration, including redirects, sitemap, and risk mitigation.",
+            "Increased organic lead generation through CRO-aligned SEO improvements."
+        ];
+
+        const CERTIFICATIONS = [
+            "Google Analytics Certification",
+            "Google Tag Manager (Advanced Implementation)",
+            "GA4 – Advanced Data Analysis & Reporting",
+            "Foundations of Prompt Engineering (AWS)",
+            "Introduction to Generative AI",
+            "Applying Generative AI for Content & Search Optimisation"
+        ];
+
+        const CASE_STUDIES = [
+            { title: "Scaling a New Content Section", client: "Square Yards / InteriorCompany", metric: "+138%", description: "Built a content engine using entity-based mapping to dominate niche authority.", details: [{ label: "Problem", value: "Low organic visibility and limited topical authority." }, { label: "Action", value: "Planned entity-based content, optimized internal linking, and aligned content with search intent." }, { label: "Result", value: "138% increase in organic traffic within 6 months." }], tags: ["Entity SEO", "Content Strategy", "Internal Linking"], chartData: { labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'], data: [1000, 1150, 1400, 1850, 2100, 2380] } },
+            { title: "Improving SEO Performance on Large Websites", client: "Enterprise Web Platforms", metric: "Steady Growth", description: "Technical optimization for large-scale platforms to fix crawl budget waste.", details: [{ label: "Problem", value: "Crawl inefficiencies and underperforming pages." }, { label: "Action", value: "Conducted technical audits, improved internal linking, and optimized key pages." }, { label: "Result", value: "Better indexing, improved rankings, and steady traffic growth." }], tags: ["Technical SEO", "Crawl Optimization", "Indexing"], chartData: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], data: [5000, 5200, 5800, 6100, 6500, 7200] } }
+        ];
+
+        const TOOLS = [
+            { name: 'Google Search Console', icon: '🔍', desc: 'Performance monitoring & indexing' },
+            { name: 'Google Analytics 4 (GA4)', icon: '📈', desc: 'Behavior & conversion tracking' },
+            { name: 'Screaming Frog', icon: '🐸', desc: 'Technical SEO & site crawling' },
+            { name: 'Ahrefs / SEMrush', icon: '🚀', desc: 'Backlink analysis & keyword research' },
+            { name: 'Looker Studio', icon: '📊', desc: 'Custom data visualization' },
+            { name: 'ChatGPT & AI tools', icon: '✨', desc: 'AI-assisted SEO workflows' },
+            { name: 'Excel / Google Sheets', icon: '📅', desc: 'Data manipulation & reporting' },
+        ];
+
+        const PROCESS = [
+            { step: "01", title: "Discovery & Audit", desc: "Deep dive into your technical setup, current rankings, and historical data." },
+            { step: "02", title: "Strategy & Mapping", desc: "Creating a data-driven roadmap focused on high-intent conversion keywords." },
+            { step: "03", title: "Execution", desc: "Coordinating content production, technical fixes, and authority building." },
+            { step: "04", title: "Scale & Optimize", desc: "Continuous monitoring and refining based on real-time ranking shifts." }
+        ];
+
+        const TESTIMONIALS = [
+            { quote: "Vivek's technical audit was a game changer. We recovered 30% of traffic lost in the last core update.", author: "Sarah J., Head of Growth" },
+            { quote: "The ROI we've seen from his topic cluster strategy is unlike any other SEO we've worked with.", author: "Michael R., SaaS Founder" }
+        ];
+
+        // Initialize UI
+        function initUI() {
+            // Services
+            const servicesGrid = document.getElementById('services-grid');
+            servicesGrid.innerHTML = SERVICES.map(s => `
+                <div class="glass p-8 rounded-3xl hover:-translate-y-2 transition-transform border border-slate-800 hover:border-blue-500/30">
+                    <div class="text-4xl mb-6">${s.icon}</div>
+                    <h3 class="text-xl font-bold mb-3">${s.title}</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">${s.description}</p>
+                </div>
+            `).join('');
+
+            // Experience
+            const experienceTimeline = document.getElementById('experience-timeline');
+            experienceTimeline.innerHTML = EXPERIENCE.map(exp => `
+                <div class="flex gap-8 group">
+                    <div class="flex flex-col items-center">
+                        <div class="w-4 h-4 rounded-full bg-blue-500 group-hover:scale-150 transition-transform shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                        <div class="w-0.5 flex-grow bg-slate-800 my-2"></div>
+                    </div>
+                    <div class="pb-8">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-1">
+                            <h3 class="text-2xl font-bold">${exp.role}</h3>
+                            <span class="text-blue-400/60 font-mono text-sm">${exp.period}</span>
+                        </div>
+                        <div class="text-blue-400 font-bold mb-4">${exp.company}</div>
+                        <ul class="space-y-2">
+                            ${exp.points.map(p => `
+                                <li class="text-slate-400 text-sm flex items-start gap-2">
+                                    <span class="text-blue-500 font-bold mt-1">▹</span>
+                                    ${p}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+
+            // Education
+            const educationGrid = document.getElementById('education-grid');
+            if (educationGrid) {
+                educationGrid.innerHTML = EDUCATION.map(edu => `
+                    <div class="glass p-6 rounded-2xl border border-white/5">
+                        <h3 class="text-xl font-bold mb-1">${edu.degree}</h3>
+                        <div class="text-blue-400 mb-2">${edu.institution}</div>
+                        <div class="text-slate-500 text-sm font-mono">${edu.period}</div>
+                    </div>
+                `).join('');
+            }
+
+            // Achievements
+            const achievementsList = document.getElementById('achievements-list');
+            if (achievementsList) {
+                achievementsList.innerHTML = ACHIEVEMENTS.map(a => `
+                    <li class="flex items-start gap-3 text-slate-400">
+                        <span class="text-blue-500 mt-1">★</span>
+                        <span>${a}</span>
+                    </li>
+                `).join('');
+            }
+
+            // Certifications
+            const certificationsGrid = document.getElementById('certifications-grid');
+            if (certificationsGrid) {
+                certificationsGrid.innerHTML = CERTIFICATIONS.map(c => `
+                    <div class="glass p-4 rounded-xl border border-white/5 text-sm text-slate-300 flex items-center gap-3">
+                        <span class="text-blue-500">📜</span>
+                        ${c}
+                    </div>
+                `).join('');
+            }
+
+            // Case Studies
+            const caseStudiesGrid = document.getElementById('case-studies-grid');
+            caseStudiesGrid.innerHTML = CASE_STUDIES.map((study, idx) => `
+                <div class="glass rounded-3xl p-8 flex flex-col hover:border-blue-500/30 transition-all group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">${study.title}</h3>
+                            <p class="text-blue-400 font-medium">${study.client}</p>
+                        </div>
+                        <div class="text-4xl font-black text-emerald-400">${study.metric}</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        ${study.details.map(d => `
+                            <li class="text-slate-400 text-sm flex items-start gap-2 leading-relaxed">
+                                <span class="text-blue-500 font-bold mt-1">▹</span>
+                                <span><strong class="text-slate-200">${d.label}:</strong> ${d.value}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="h-64 w-full mb-8 bg-slate-950/50 rounded-2xl p-4">
+                        <canvas id="chart-${idx}"></canvas>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        ${study.tags.map(t => `<span class="px-3 py-1 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Initialize Charts
+            CASE_STUDIES.forEach((study, idx) => {
+                const ctx = document.getElementById(`chart-${idx}`).getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: study.chartData.labels,
+                        datasets: [{
+                            label: 'Traffic',
+                            data: study.chartData.data,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#475569' } },
+                            y: { display: false }
+                        }
+                    }
+                });
+            });
+
+            // Tools
+            const toolsGrid = document.getElementById('tools-grid');
+            toolsGrid.innerHTML = TOOLS.map(t => `
+                <div class="glass p-8 rounded-3xl border border-white/5 hover:border-blue-500/30 transition-all group hover:-translate-y-2 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] xl:w-[calc(25%-2rem)] text-center flex flex-col items-center justify-center min-h-[240px]">
+                    <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300 inline-block bg-white/5 p-4 rounded-2xl">${t.icon}</div>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">${t.name}</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed max-w-[220px]">${t.desc}</p>
+                </div>
+            `).join('');
+
+            // Process
+            const processGrid = document.getElementById('process-grid');
+            processGrid.innerHTML = PROCESS.map(p => `
+                <div class="relative p-8 glass rounded-2xl border border-white/5 overflow-hidden group">
+                    <div class="text-6xl font-black text-blue-500/10 absolute -top-2 -right-2 group-hover:scale-110 transition-transform">${p.step}</div>
+                    <h3 class="text-xl font-bold mb-4 relative z-10">${p.title}</h3>
+                    <p class="text-slate-400 text-sm relative z-10">${p.desc}</p>
+                </div>
+            `).join('');
+
+            // Testimonials
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+            testimonialsGrid.innerHTML = TESTIMONIALS.map(t => `
+                <div class="glass p-10 rounded-[2rem] border-white/10 relative">
+                    <div class="text-4xl text-blue-500/20 absolute top-8 left-8">"</div>
+                    <p class="text-lg text-slate-300 mb-6 relative z-10">${t.quote}</p>
+                    <div class="font-bold text-white">— ${t.author}</div>
+                </div>
+            `).join('');
+        }
+
+        // Scroll Logic
+        function initScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+            window.addEventListener('scroll', () => {
+                const scrolled = window.scrollY > 50;
+                const nav = document.getElementById('navbar');
+                if (scrolled) {
+                    nav.classList.add('glass', 'py-3', 'border-b', 'border-white/5', 'shadow-2xl', 'shadow-blue-500/5');
+                    nav.classList.remove('bg-transparent', 'py-6');
+                } else {
+                    nav.classList.remove('glass', 'py-3', 'border-b', 'border-white/5', 'shadow-2xl', 'shadow-blue-500/5');
+                    nav.classList.add('bg-transparent', 'py-6');
+                }
+
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = (window.scrollY / totalHeight) * 100;
+                document.getElementById('scroll-progress').style.width = `${progress}%`;
+
+                // Scroll Spy
+                const sections = ['about', 'services', 'experience', 'case-studies', 'tools', 'process', 'contact'];
+                let current = '';
+                sections.forEach(section => {
+                    const el = document.getElementById(section);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top <= 150 && rect.bottom >= 150) current = section;
+                    }
+                });
+
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('text-blue-400', 'font-bold');
+                    if (link.dataset.section === current) {
+                        link.classList.add('text-blue-400', 'font-bold');
+                    }
+                });
+            });
+        }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('opacity-100');
+            if (isOpen) {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+            } else {
+                mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'translate-y-0');
+            }
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+            });
+        });
+
+        // AI Tool Logic
+        const aiForm = document.getElementById('ai-form');
+        const aiResult = document.getElementById('ai-result');
+        const aiSubmit = document.getElementById('ai-submit');
+
+        aiForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const niche = document.getElementById('ai-niche').value;
+            const url = document.getElementById('ai-url').value || "not provided";
+            
+            aiSubmit.disabled = true;
+            aiSubmit.innerHTML = `<div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Analyzing Opportunities...`;
+            
+            try {
+                const apiKey = "YOUR_GEMINI_API_KEY"; // Placeholder for user to fill after download
+                // In the live preview, we use the injected key
+                const liveApiKey = "${process.env.GEMINI_API_KEY || ''}";
+                const finalKey = liveApiKey || apiKey;
+
+                if (!finalKey || finalKey === "YOUR_GEMINI_API_KEY") {
+                    alert("Please provide a Gemini API Key to use the AI tool. You can find this in the code at line ~450.");
+                    throw new Error("API Key missing");
+                }
+                
+                const genAI = new GoogleGenAI(finalKey);
+                const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+                
+                const prompt = `Act as a Senior SEO Consultant with 15 years experience. Generate a concise 1-page SEO strategy for a business in the ${niche} niche (Website: ${url}). Provide specific, actionable advice. Return the response in JSON format with these exact keys: "strategy" (string), "quickWins" (array of strings), "competitorAnalysis" (string).`;
+                
+                const result = await model.generateContent(prompt);
+                const responseText = result.response.text;
+                const data = JSON.parse(responseText.replace(/```json|```|json/g, '').trim());
+
+                aiResult.innerHTML = `
+                    <div>
+                        <h4 class="text-xl font-bold text-blue-400 mb-3 flex items-center gap-2">🎯 Core Strategy</h4>
+                        <p class="text-slate-300 leading-relaxed">${data.strategy}</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-bold text-emerald-400 mb-3">🚀 Quick Wins</h4>
+                            <ul class="space-y-3">
+                                ${data.quickWins.map(win => `<li class="flex items-start gap-3 text-slate-400"><span class="mt-1 text-emerald-500 font-bold">✓</span>${win}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-amber-400 mb-3">⚔️ Competitor Analysis</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed">${data.competitorAnalysis}</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t border-slate-800 text-center">
+                        <p class="text-slate-500 text-sm italic">Note: This is an AI-generated strategy. For a comprehensive execution plan, let's connect.</p>
+                    </div>
+                `;
+                aiResult.classList.remove('hidden');
+            } catch (error) {
+                console.error("AI Error:", error);
+                alert("Failed to generate strategy. Please check your connection or try again.");
+            } finally {
+                aiSubmit.disabled = false;
+                aiSubmit.innerHTML = `✨ Generate My Custom SEO Strategy`;
+            }
+        });
+
+        // Initialize everything
+        window.openResume = function() {
+            const resumeWindow = window.open('', '_blank');
+            if (!resumeWindow) return;
+            const resumeHtml = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Vivek Kumar - Resume</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+                    <style>
+                        * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+                        body { font-family: 'Inter', sans-serif; line-height: 1.4; color: #000; margin: 0; padding: 40px 0; background: #525659; }
+                        .page { background: white; width: 210mm; min-height: 297mm; margin: 0 auto 20px; padding: 20mm; box-shadow: 0 0 10px rgba(0,0,0,0.5); position: relative; }
+                        header { text-align: center; margin-bottom: 20px; }
+                        h1 { margin: 0 0 10px; font-size: 28pt; font-weight: 700; letter-spacing: 1px; }
+                        .summary { font-size: 10.5pt; color: #333; margin-bottom: 15px; max-width: 95%; margin-left: auto; margin-right: auto; text-align: center; }
+                        .contact-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; font-size: 9.5pt; color: #000; margin-bottom: 5px; }
+                        section { margin-bottom: 15px; }
+                        h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0088cc; border-bottom: 1.5px solid #333; padding-bottom: 2px; margin: 15px 0 10px; }
+                        .job-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 10.5pt; margin-top: 10px; }
+                        .job-title-row { display: flex; justify-content: space-between; font-size: 10pt; margin-bottom: 5px; }
+                        .company-name { font-size: 11pt; font-weight: 700; }
+                        ul { margin: 0 0 10px; padding-left: 18px; font-size: 9.5pt; color: #222; }
+                        li { margin-bottom: 3px; position: relative; list-style-type: disc; }
+                        .print-btn { position: fixed; top: 20px; right: 20px; background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+                        @media print { body { background: white; padding: 0; } .page { margin: 0; box-shadow: none; width: 100%; height: auto; } .print-btn { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <button class="print-btn" onclick="window.print()">Download as PDF</button>
+                    <div class="page">
+                        <header>
+                            <h1>VIVEK KUMAR</h1>
+                            <p class="summary">SEO professional with 8+ years of experience driving organic growth for real estate and B2B platforms. Specialized in technical SEO, content strategy, schema, and conversion-focused optimisation, with a proven record of achieving 138% organic traffic growth within 6 months.</p>
+                            <div class="contact-bar">
+                                <span>✉️ techvivek09@gmail.com</span>
+                                <span>📞 +91-8800385860</span>
+                                <span>📍 New Delhi, India</span>
+                            </div>
+                            <div style="text-align: center; font-size: 9.5pt; margin-top: 5px;">
+                                <a href="https://www.linkedin.com/in/vivek-kumar-a08125a2/" style="color: inherit; text-decoration: none;">🔗 linkedin.com/in/vivek-kumar-a08125a2</a>
+                            </div>
+                        </header>
+                        <section>
+                            <h2>SKILLS</h2>
+                            <ul style="list-style-type: none; padding-left: 0;">
+                                ${SERVICES.map(s => `<li>• <strong>${s.title}</strong> – ${s.description}</li>`).join('')}
+                            </ul>
+                        </section>
+                        <section>
+                            <h2>WORK EXPERIENCE</h2>
+                            ${EXPERIENCE.map(exp => `
+                                <div class="company-block">
+                                    <div class="job-header"><span class="company-name">${exp.company}</span></div>
+                                    <div class="job-title-row"><span>${exp.role}</span><span>${exp.period}</span></div>
+                                    <ul>${exp.points.map(p => `<li>${p}</li>`).join('')}</ul>
+                                </div>
+                            `).join('')}
+                        </section>
+                        <section>
+                            <h2>EDUCATION</h2>
+                            ${EDUCATION.map(edu => `
+                                <div class="job-header"><span class="company-name">${edu.degree}</span></div>
+                                <ul style="list-style-type: none; padding-left: 0; margin-top: 5px;">
+                                    <li>• ${edu.institution} | ${edu.period}</li>
+                                </ul>
+                            `).join('')}
+                        </section>
+                        <section>
+                            <h2>KEY ACHIEVEMENTS</h2>
+                            <ul>${ACHIEVEMENTS.map(a => `<li>${a}</li>`).join('')}</ul>
+                        </section>
+                        <section>
+                            <h2>CERTIFICATIONS</h2>
+                            <ul style="list-style-type: none; padding-left: 0;">
+                                ${CERTIFICATIONS.map(c => `<li>• ${c}</li>`).join('')}
+                            </ul>
+                        </section>
+                    </div>
+                </body>
+                </html>
+            `;
+            resumeWindow.document.write(resumeHtml);
+            resumeWindow.document.close();
+        };
+
+        window.downloadPortfolio = function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Vivek_Kumar_Portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        initUI();
+        initScroll();
+    </script>
+
+</body>
+</html>
